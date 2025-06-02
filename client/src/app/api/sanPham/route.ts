@@ -23,6 +23,7 @@ export async function GET(request: Request) {
       where: whereClause,
       include: {
         nguoiban: true,
+        loai: true,
       },
       orderBy: {
         ngaytao: 'desc',
@@ -34,12 +35,12 @@ export async function GET(request: Request) {
       title: product.ten,
       price: Number(product.gia),
       description: product.mota ?? '',
-      location: '', // Khong co truong location trong model SanPham
       imageUrl: product.hinhanh ?? '',
       sellerId: product.nguoibanID,
       sellerName: product.nguoiban?.ten ?? '',
       sellerClerkId: product.nguoiban?.clerkId ?? '',
       loaiID: product.loaiID,
+      loaiTen: product.loai?.ten ?? '',
     }));
 
     return NextResponse.json(mappedProducts);
@@ -57,10 +58,12 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Find internal user ID by Clerk userId (clerkId)
+    // Tìm ID người dùng nội bộ theo Clerk userId (clerkId)
     const user = await prisma.user.findUnique({
       where: { clerkId: clerkUserId },
     });
+
+    
 
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
@@ -101,7 +104,7 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Find internal user ID by Clerk userId (clerkId)
+   
     const user = await prisma.user.findUnique({
       where: { clerkId: clerkUserId },
     });

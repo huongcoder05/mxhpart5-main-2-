@@ -93,12 +93,12 @@ export default function CartPage() {
     alert("Chúc Mừng Bạn Đã Hàng Thành Công!!!!!.");
   };
 
-  // Handle "Chi tiết" click (for now just alert)
+  // Handle "Chi tiết" click 
   const handleDetails = (item: CartItem) => {
     alert(`Chi tiết sản phẩm:\nTên: ${item.title}\nGiá: ${item.price.toLocaleString("vi-VN")} đ`);
   };
 
-  // Handle "Cập Nhật" click (for now just reload cart to simulate update)
+  // Handle "Cập Nhật" click 
   const handleUpdate = () => {
     alert("Cập nhật giỏ hàng thành công.");
     loadCartItems();

@@ -15,6 +15,7 @@ interface Product {
   sellerName?: string;
   sellerClerkId?: string;
   loaiID?: number;
+  loaiTen?: string;
   isFeatured?: boolean;
   rating?: number;
 }
@@ -72,7 +73,7 @@ export default function MarketplacePage() {
       });
   }, [selectedCategoryId]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setNewProduct((prev) => ({
       ...prev,
@@ -244,15 +245,19 @@ export default function MarketplacePage() {
               onChange={handleInputChange}
               className="w-full mb-2 p-2 border rounded"
             />
-             {/* LoaiID input hidden as per user request  */}
-             <input
-              type="number"
+            <select
               name="loaiID"
-              placeholder="Loại sản phẩm (ID)"
               value={newProduct.loaiID || ""}
               onChange={handleInputChange}
               className="w-full mb-2 p-2 border rounded"
-            /> 
+            >
+              <option value="">-- Chọn loại sản phẩm --</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.ten}
+                </option>
+              ))}
+            </select>
           
             <textarea
               name="description"
@@ -330,14 +335,15 @@ export default function MarketplacePage() {
               <div className="font-semibold text-lg">
                 {(product.price ?? 0).toLocaleString("vi-VN")} đ
               </div>
-              <div className="text-sm font-medium flex items-center">
-                {product.title}
-                <div className="ml-2 flex">
+              <div>
+                <div className="text-sm font-medium">Tên sản phẩm: {product.title}</div>
+                {/* <div className="text-xs text-gray-600">Loại sản phẩm: {product.loaiTen || "Chưa có"}</div> */}
+                <div className="flex mt-1">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <svg
                       key={star}
                       xmlns="http://www.w3.org/2000/svg"
-                      fill={star <= (product.rating ?? 0) ? "currentColor" : "none"}
+                      fill={star <= (product.rating ?? 4) ? "currentColor" : "none"}
                       viewBox="0 0 24 24"
                       stroke="currentColor"
                       className="w-4 h-4 text-yellow-400"
